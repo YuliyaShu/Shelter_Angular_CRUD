@@ -28,6 +28,8 @@ export class Pet {
 
   @Prop()
   parasites?: string;
+
+  _id: { type: string };
 }
 
 export const PetSchema = SchemaFactory.createForClass(Pet);
