@@ -10,22 +10,22 @@ export class PetsService {
   constructor(@InjectModel(Pet.name) private petModel: Model<PetDocument>) {}
 
   async create(createPetDto: CreatePetDto): Promise<Pet> {
-    return new this.petModel(createPetDto).save();
+    return await new this.petModel(createPetDto).save();
   }
 
   async findAll(): Promise<Pet[]> {
-    return this.petModel.find().exec();
+    return await this.petModel.find().exec();
   }
 
-  async findOne(_id: number) {
-    return this.petModel.findOne({ _id });
+  async findById(id: string) {
+    return await this.petModel.findById(id);
   }
 
-  async update(_id: number, updatePetDto: UpdatePetDto) {
-    return this.petModel.updateOne({ _id }, { $set: { ...updatePetDto } });
+  async update(id: string, updatePetDto: UpdatePetDto) {
+    return await this.petModel.updateOne({ id }, { $set: { ...updatePetDto } });
   }
 
-  async remove(_id: number) {
-    return this.petModel.deleteOne({ _id });
+  async remove(id: string) {
+    return await this.petModel.deleteOne({ _id: id });
   }
 }
