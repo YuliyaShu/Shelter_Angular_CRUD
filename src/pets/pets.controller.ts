@@ -17,6 +17,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 
+interface DeleteResponse {
+  acknowledged: boolean;
+  deletedCount: number;
+}
+
 @ApiTags('pets')
 @Controller('pets')
 export class PetsController {
@@ -38,7 +43,6 @@ export class PetsController {
   @ApiOkResponse({ description: 'Found successfully' })
   @ApiNotFoundResponse({ description: "User can't be find" })
   findById(@Param('id') id: string) {
-    console.log('🚀 ~ findOne ~ id:', id);
     return this.petsService.findById(id);
   }
 
@@ -49,7 +53,8 @@ export class PetsController {
   }
 
   @Delete(':id')
-  @ApiNotFoundResponse({ description: "User can't be find" })
+  @ApiOkResponse({ description: 'Deleted successfully' })
+  @ApiNotFoundResponse({ description: "User can't be found" })
   remove(@Param('id') id: string) {
     return this.petsService.remove(id);
   }
