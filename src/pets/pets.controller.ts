@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { PetsService } from './pets.service';
 import { CreatePetDto } from './dto/create-pet.dto';
@@ -16,11 +17,6 @@ import {
   ApiOkResponse,
   ApiTags,
 } from '@nestjs/swagger';
-
-interface DeleteResponse {
-  acknowledged: boolean;
-  deletedCount: number;
-}
 
 @ApiTags('pets')
 @Controller('pets')
@@ -35,27 +31,24 @@ export class PetsController {
 
   @Get()
   @ApiOkResponse({ description: 'Found successfully' })
-  findAll() {
-    return this.petsService.findAll();
-  }
-
-  @Get(':id')
-  @ApiOkResponse({ description: 'Found successfully' })
   @ApiNotFoundResponse({ description: "User can't be find" })
-  findById(@Param('id') id: string) {
-    return this.petsService.findById(id);
+  findById(@Query('_id') id: string) {
+    if (id) {
+      return this.petsService.findById(id);
+    } else {
+      return this.petsService.findAll();
+    }
   }
 
-  @Patch(':id')
+  @Patch()
   @ApiOkResponse({ description: 'Updated successfully' })
-  update(@Param('id') id: string, @Body() updatePetDto: UpdatePetDto) {
+  update(@Query('_id') id: string, @Body() updatePetDto: UpdatePetDto) {
     return this.petsService.update(id, updatePetDto);
   }
-
-  @Delete(':id')
+  @Delete()
   @ApiOkResponse({ description: 'Deleted successfully' })
   @ApiNotFoundResponse({ description: "User can't be found" })
-  remove(@Param('id') id: string) {
+  remove(@Query('_id') id: string) {
     return this.petsService.remove(id);
   }
 }
