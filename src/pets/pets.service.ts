@@ -17,12 +17,15 @@ export class PetsService {
     return await this.petModel.find().exec();
   }
 
-  async findById(id: string) {
+  async findById(id: string): Promise<Pet> {
     return await this.petModel.findById(id);
   }
 
   async update(id: string, updatePetDto: UpdatePetDto) {
-    return await this.petModel.updateOne({ id }, { $set: { ...updatePetDto } });
+    return await this.petModel.updateOne(
+      { _id: id },
+      { $set: { ...updatePetDto } },
+    );
   }
 
   async remove(id: string) {
